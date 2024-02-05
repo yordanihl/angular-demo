@@ -1,5 +1,9 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
+# API Server
+/api-server/node_modules
+/api-server/items.json
+
 # Compiled output
 /dist
 /tmp

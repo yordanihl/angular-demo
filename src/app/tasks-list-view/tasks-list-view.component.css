@@ -1,0 +1,16 @@
+.popup-details {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 200px;
+  height: 100px;
+  background-color: white;
+  border: 1px solid gray;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: end;
+  gap: 5px;
+  margin-bottom: 5px;
+}
