@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef } from 'ag-grid-community';
+import { CellValueChangedEvent, ColDef } from 'ag-grid-community';
 import { IItem } from '../item';
 import { ItemService } from '../item.service';
 
@@ -14,10 +14,11 @@ import { ItemService } from '../item.service';
 export class TasksTableViewComponent {
   defaultColDef: ColDef = {
     filter: true,
-    // editable: true
+    editable: true
   };
 
-  rowData: IItem[] = [];
+  rowData!:IItem[];
+  // rowData$!:Observable<IItem[]>; // async pipe doesn't work?
 
   colDefs: ColDef[] = [
     { field: "id", filter: false, editable: false },
@@ -25,11 +26,14 @@ export class TasksTableViewComponent {
     { field: "extraInfo" }
   ];
 
-  constructor(private itemService: ItemService) { }
+  constructor(private itemService: ItemService) { 
+  }
 
   ngOnInit(){
-    this.itemService.localItems$.subscribe(items => {
-      this.rowData = items;
-    });
+    this.itemService.localItems$.subscribe(items => this.rowData = items);
+  }
+
+  onCellValueChanged(event: CellValueChangedEvent) {
+    this.itemService.editItem(event.data);
   }
 }

@@ -7,7 +7,8 @@
 Displays tasks in List view and Table view.
 
 ## Table view
-Utilizes [Angular Data Grid](https://ag-grid.com/) to allow tasks to be sorted and filtered.
+- Utilizes [Angular Data Grid](https://ag-grid.com/) to allow tasks to be sorted and filtered.
+- Tasks may be edited by double-clicking on a cell.
 
 ## List view
 - Displays the tasks in a vertical list.
