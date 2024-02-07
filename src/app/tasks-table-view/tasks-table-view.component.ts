@@ -3,6 +3,7 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { CellValueChangedEvent, ColDef } from 'ag-grid-community';
 import { IItem } from '../item';
 import { ItemService } from '../item.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tasks-table-view',
@@ -12,6 +13,7 @@ import { ItemService } from '../item.service';
   styleUrls: ['./tasks-table-view.component.css']
 })
 export class TasksTableViewComponent {
+  destroySubscription$ = new Subject<void>();
   defaultColDef: ColDef = {
     filter: true,
     editable: true
@@ -30,7 +32,11 @@ export class TasksTableViewComponent {
   }
 
   ngOnInit(){
-    this.itemService.localItems$.subscribe(items => this.rowData = items);
+    this.itemService.localItems$.pipe(takeUntil(this.destroySubscription$)).subscribe(items => this.rowData = items);
+  }
+
+  ngOnDestroy() {
+    this.destroySubscription$.next();
   }
 
   onCellValueChanged(event: CellValueChangedEvent) {

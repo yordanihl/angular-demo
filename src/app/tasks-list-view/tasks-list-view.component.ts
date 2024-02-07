@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IItem } from '../item';
 import { ItemService } from '../item.service';
-import { skip, take } from 'rxjs';
+import { Subject, skip, take, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-tasks-list-view',
@@ -17,11 +17,12 @@ export class TasksListViewComponent {
   formItem: IItem = { id: 0, name: '', extraInfo: '' };
   draggedItem: IItem = { id: 0, name: '', extraInfo: '' };
   dragTargetId: number = 0;
+  destroySubscription$ = new Subject<void>();
 
   constructor(private itemService: ItemService) { }
 
   ngOnInit() {
-    this.itemService.localItems$.subscribe({
+    this.itemService.localItems$.pipe(takeUntil(this.destroySubscription$)).subscribe({
       next: items => {
         this.items = items;
         this.items.forEach(item => {
@@ -32,6 +33,10 @@ export class TasksListViewComponent {
       },
       error: error => console.log(error)
     });
+  }
+
+  ngOnDestroy() {
+    this.destroySubscription$.next();
   }
 
   itemHandleDragstart(itemId: number) {
